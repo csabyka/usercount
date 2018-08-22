@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from six.moves import urllib
 from datetime import datetime
@@ -95,10 +96,12 @@ def get_between(s, substring1, substring2):
 pagecontent = page.content.replace("\n", "")
 
 # Get the number of users, removing commas
-current_id = int( get_between(pagecontent, "Home to</span><strong>", "</strong><span>users").replace(",", ""))
+#current_id = int( get_between(pagecontent, "Home to</span><strong>", "</strong><span>users").replace(",", ""))
+current_id = int( get_between(pagecontent, "Összesen</span><strong>", "</strong><span>felhasználónk").replace(",", ""))
 
 # Get the number of toots, removing commas
-num_toots = int (get_between(pagecontent, "Who authored</span><strong>", "</strong><span>statuses").replace(",", ""))
+#num_toots = int (get_between(pagecontent, "Who authored</span><strong>", "</strong><span>statuses").replace(",", ""))
+num_toots = int (get_between(pagecontent, "eddig</span><strong>", "</strong><span>tülköt küldött").replace(",", "").replace(" ", ""))
 
 print("Number of users: %s "% current_id)
 print("Number of toots: %s "% num_toots )
@@ -179,7 +182,8 @@ if do_upload:
     file_to_upload = 'graph.png'
 
     print "Uploading %s..."%file_to_upload
-    media_dict = mastodon.media_post(file_to_upload,"image/png")
+#    media_dict = mastodon.media_post(file_to_upload,"image/png")
+    media_dict = mastodon.media_post(file_to_upload)
 
     print "Uploaded file, returned:"
     print str(media_dict)
@@ -188,7 +192,10 @@ if do_upload:
     # T  O  O  T !
     ###############################################################################
 
-    toot_text = format(current_id, ",d") + " accounts \n"
+#    toot_text = format(current_id, ",d") + " accounts \n"
+#    toot_text = format(num_toots, ",d") + " toots \n"
+    toot_text = format(current_id, ",d") + " accounts \n" + format(num_toots, ",d") + " toots \n"
+
     toot_text += hourly_change_string
     toot_text += daily_change_string
     toot_text += weekly_change_string
